@@ -3,9 +3,15 @@ import React, { Component } from "react";
 
 class Book extends Component {
 
+    changeShelf = (e) => {
+        e.preventDefault();
+        console.log(this.props.book);
+        this.props.updateShelf(this.props.book, e.target.value)
+    }
 
     render() {
-        const { title, authors, imageLinks } = this.props;
+        const { title, authors, imageLinks, shelf } = this.props;
+
         return (
             <div className="book">
                 <div className="book-top">
@@ -14,7 +20,8 @@ class Book extends Component {
                             `url(${imageLinks ? imageLinks.thumbnail : ""})`
                     }}></div>
                     <div className="book-shelf-changer">
-                        <select>
+                        <select value={shelf === undefined ? "none" : shelf}
+                            onChange={this.changeShelf}>
                             <option value="move" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
@@ -25,6 +32,7 @@ class Book extends Component {
                 </div>
                 <div className="book-title">{title}</div>
                 <div className="book-authors">{authors ? authors : ""}</div>
+                <div className="book-authors">{shelf}</div>
             </div>
 
         )

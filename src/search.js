@@ -16,9 +16,7 @@ class Search extends Component {
         }))
         this.search(this.state.query)
     }
-    clearQuery = () => {
-        this.updateQuery('')
-    }
+
 
     search = async (query) => {
         if (!!query) {
@@ -32,10 +30,12 @@ class Search extends Component {
 
     render() {
         const { query, books } = this.state;
+        const { updateShelf } = this.props
+
         const resBooks = (books.length >= 0 ? books.filter(book => (
             book.title.toLowerCase().includes(query.toLowerCase())
-        )) : "")
-        console.log(resBooks[0])
+        )) : [])
+        console.log(`resbooks `, resBooks)
         return (
             <div>
 
@@ -58,17 +58,24 @@ class Search extends Component {
                 <div className="search-books-results">
                     <ol className="books-grid">
                         {
-                            resBooks.length > 0 && query.length > 0 && resBooks.map(book => (
-                                <li>
+                            resBooks.length > 0 && resBooks.map(book => (
+
+
+
+                                <li key={book.id} >
                                     <Book
                                         title={book.title}
                                         authors={book.authors}
                                         book={book}
                                         key={book.id}
                                         imageLinks={book.imageLinks}
+                                        updateShelf={updateShelf}
+                                        shelf={book.shelf}
 
                                     />
+
                                 </li>
+
                             ))
                         }
 

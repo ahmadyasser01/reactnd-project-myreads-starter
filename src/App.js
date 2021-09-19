@@ -1,10 +1,8 @@
 import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
-import Header from './Header'
-import BookShelf from './BookShelf'
 import { Link, Route } from 'react-router-dom'
-import Home from './home'
+import Home from './Home'
 import Search from './search'
 
 class BooksApp extends React.Component {
@@ -23,12 +21,29 @@ class BooksApp extends React.Component {
   componentDidMount() {
     BooksAPI.getAll().then(books => this.setState(() => ({ books })))
   }
+  updateShelf = async (book, shelf) => {
+    console.log("before change,", book)
+    if (book[shelf] !== shelf) {
+      await BooksAPI.update(book, shelf)
+      console.log(`ss`, book);
+      book.shelf = shelf;
+      console.log(book.shelf);
+      this.setState(prev => ({
+        books: prev.books.filter(b => b.id !== book.id)
+          .concat([book])
+      }
+      )
+
+      )
+    }
+
+  }
 
   render() {
     return (
       <div className="app">
-        <Route exact path="/" component={Home} />
-        <Route path="/search" component={Search} />
+        <Route exact path="/" render={() => (<Home books={this.state.books} updateShelf={this.updateShelf}></Home>)} />
+        <Route path="/search" render={() => (<Search books={this.state.books} updateShelf={this.updateShelf}></Search>)} />
         <div className="open-search">
           <Link to="/search">
             <button>Add a book</button>
