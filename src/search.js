@@ -1,44 +1,29 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import * as BooksAPI from './BooksAPI'
 import Book from "./Book";
 class Search extends Component {
     state = {
-        books: [],
         query: ""
     }
 
-    updateQuery = (e) => {
-        e.preventDefault()
+    updateQuery = async (e) => {
+        // e.preventDefault()
         const queryStr = e.target.value
-        this.setState(() => ({
+        await this.setState(() => ({
             query: queryStr
         }))
-        this.search(this.state.query)
-    }
-
-
-    search = async (query) => {
-        if (!!query) {
-            const res = await BooksAPI.search(query);
-            if (res) {
-                this.setState(() => ({ books: res })
-                )
-            }
-        }
+        await this.props.search(queryStr)
     }
 
     render() {
-        const { query, books } = this.state;
+        const { books } = this.props;
+        const { query } = this.state
         const { updateShelf } = this.props
 
-        const resBooks = (books.length >= 0 ? books.filter(book => (
-            book.title.toLowerCase().includes(query.toLowerCase())
-        )) : [])
-        console.log(`resbooks `, resBooks)
+
+
         return (
             <div>
-
 
                 <div className="search-books">
                     <div className="search-books-bar">
@@ -53,14 +38,10 @@ class Search extends Component {
 
                     </div>
                 </div>
-
-
                 <div className="search-books-results">
                     <ol className="books-grid">
                         {
-                            resBooks.length > 0 && resBooks.map(book => (
-
-
+                            (books.length > 0 && query.length > 0) && books.map(book => (
 
                                 <li key={book.id} >
                                     <Book

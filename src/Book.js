@@ -3,15 +3,16 @@ import React, { Component } from "react";
 
 class Book extends Component {
 
-    changeShelf = (e) => {
+    changeShelf = async (e) => {
         e.preventDefault();
-        console.log(this.props.book);
-        this.props.updateShelf(this.props.book, e.target.value)
+        await this.props.updateShelf(this.props.book, e.target.value)
+        //   await this.props.updateShelfSearch(this.props.book, e.target.value)
+
+
     }
 
     render() {
         const { title, authors, imageLinks, shelf } = this.props;
-
         return (
             <div className="book">
                 <div className="book-top">
@@ -20,7 +21,8 @@ class Book extends Component {
                             `url(${imageLinks ? imageLinks.thumbnail : ""})`
                     }}></div>
                     <div className="book-shelf-changer">
-                        <select value={shelf === undefined ? "none" : shelf}
+                        <select
+                            value={shelf === undefined ? "none" : shelf}
                             onChange={this.changeShelf}>
                             <option value="move" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
@@ -32,7 +34,6 @@ class Book extends Component {
                 </div>
                 <div className="book-title">{title}</div>
                 <div className="book-authors">{authors ? authors : ""}</div>
-                <div className="book-authors">{shelf}</div>
             </div>
 
         )
