@@ -21,8 +21,6 @@ class BookShelf extends Component {
                                 filtredBooks.map(book => (
                                     <li key={book.id}>
                                         <Book
-
-
                                             title={book.title}
                                             authors={book.authors}
                                             book={book}
