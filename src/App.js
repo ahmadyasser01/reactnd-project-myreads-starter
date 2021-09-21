@@ -8,7 +8,8 @@ import Search from './search'
 class BooksApp extends React.Component {
   state = {
     books: [],
-    searchRes: []
+    searchRes: [],
+    query: ""
 
   }
   componentDidMount() {
@@ -26,12 +27,10 @@ class BooksApp extends React.Component {
   }
   search = async (query) => {
     if (query !== '') {
+      await this.setState({ query })
       const { books } = this.state;
-      const res = await BooksAPI.search(query)
-      if (res.error) {
-        this.setState({ searchRes: [] })
-      }
-      else {
+      try {
+        const res = await BooksAPI.search(this.state.query)
         res.filter(book => book.title.toLowerCase().includes(query.toLowerCase())) //filter the search result
         // to know if book on search page is really on a shelf or no and if it has a shelf assign a shelf to the searched books 
         res.map(sbook => {
@@ -39,18 +38,28 @@ class BooksApp extends React.Component {
           sbook.shelf = bookHasShelf ? bookHasShelf.shelf : "none"
           return sbook
         })
+
+        this.setState({ searchRes: res })
       }
-      this.setState({ searchRes: res })
+      catch (e) {
+        this.setState({ searchRes: [] })
+      }
+
     }
   }
-
-
 
   render() {
     return (
       <div className="app">
         <Route exact path="/" render={() => (<Home books={this.state.books} updateShelf={this.updateShelf}></Home>)} />
-        <Route path="/search" render={() => (<Search books={this.state.searchRes} updateShelf={this.updateShelf} search={this.search}></Search>)} />
+        <Route path="/search" render={() => (<Search
+          books={this.state.searchRes}
+          updateShelf={this.updateShelf}
+          search={this.search}
+
+        />
+
+        )} />
       </div>
     )
   }

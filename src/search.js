@@ -15,6 +15,11 @@ class Search extends Component {
         await this.props.search(queryStr)
     }
 
+
+
+
+
+
     render() {
         const { books } = this.props;
         const { query } = this.state
@@ -24,6 +29,7 @@ class Search extends Component {
 
         return (
             <div>
+
 
                 <div className="search-books">
                     <div className="search-books-bar">
@@ -38,6 +44,8 @@ class Search extends Component {
 
                     </div>
                 </div>
+
+
                 <div className="search-books-results">
                     <ol className="books-grid">
                         {
