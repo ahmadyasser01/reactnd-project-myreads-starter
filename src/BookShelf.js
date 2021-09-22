@@ -5,7 +5,6 @@ class BookShelf extends Component {
 
     render() {
         const { books, updateShelf } = this.props
-        console.log(books);
         const filtredBooks = books.filter(book => (book.shelf === this.props.title))
         return (
             <div>
